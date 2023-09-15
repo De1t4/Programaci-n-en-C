@@ -16,6 +16,8 @@ c. Promedio general.
 void verMatriz(materias);
 
 void main(){
+    char nombre[20];
+    char apellido[20];
     char materias[CANT_MATERIAS][LONGITUD_TEXTO] = {
         "Matematica",
         "Lengua",
@@ -24,6 +26,12 @@ void main(){
         "Biologia",
     };
     int boletin[CANT_TRIMESTRE][CANT_MATERIAS];
+    printf("Ingresar nombre del alumno \n>");
+    gets(nombre);
+    printf("Ingresar apellido del alumno \n>");
+    gets(apellido);
+    system("cls");
+    printf("El boletin del alumno %s %s:\n",nombre, apellido);
     cargarMatriz(boletin);
     verMatriz(materias, boletin);
 }
