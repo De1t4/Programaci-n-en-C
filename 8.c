@@ -1,42 +1,113 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#define POSICIONES 10
 
-/*Dados dos arreglos unidimensionales A, B de n y m valores respectivamente, que representan los elementos de un conjunto, se pide mostrar:
-a. La unión.
-b. La diferencia.
-c. La intersección.
-*/
-int cargar(int[], int);
 int unionVectores(int[], int);
 void imprimir(int[], int);
-void unionArrays(int[], int[], int[], int, int);
 void diferenciaArrays(int[], int[], int);
-void interArray(int[], int[], int[], int);
+void unionArrays(int[], int[]);
+void interArray(int[], int[]);
+int cargar(int[]);
+void numAzarSinRepetir(int[]);
+void restaVector1(int[], int[]);
+void restaVector2(int[], int[]);
+void repeticionesArrays(int[]);
 
 void main(){
-    int n = 8; int m = 8; int k = 0;
-    k = n + m;
-    int firstArray[n]; int secondArray[m]; int unionArray[k];
-    int diferenciaArray[k];int intersecArrays[k];
+    int opcion;
+    int firstArray[POSICIONES]; int secondArray[POSICIONES];
 
-    cargar(firstArray, n);
-    cargar(secondArray, m);
-
-    printf("Union de vectores\n");
-    unionArrays(firstArray, secondArray, unionArray, n, k);
-
-    printf("\nArray con diferencias\n");
-    diferenciaArrays(unionArray, diferenciaArray, k);
-
-    printf("\nArray con Interseccion\n");
-    interArray(firstArray, secondArray, intersecArrays, n);
+    cargar(firstArray);
+    cargar(secondArray);
+    printf("Primer Vector\n");
+    imprimir(firstArray, POSICIONES);
+    printf("\nSegundo Vector\n");
+    imprimir(secondArray, POSICIONES);
+    printf("\n\n|MENU PRINCIPAL|\n1-Ver vector y cuantos datos se repiten en cada vector\n2-Ver vector con numeros al azar distintos\n3-Ver Union entre vectores\n4-Interseccion entre vectores\n5-Resta entre el primer vector y el segundo\n6-Resta entre el segundo vector y el primero\n");
+    do{
+        printf("\nIngresar una opcion\n>");
+        scanf("%d", &opcion);
+            switch(opcion){
+            case 1:
+                printf("La cantidad de repeticiones del primer vector es de: ");
+                repeticionesArrays(firstArray);
+                printf("\nLa cantidad de repeticiones del segundo vector es de: ");
+                repeticionesArrays(secondArray);
+                break;
+            case 2:
+                numAzarSinRepetir(firstArray);
+                printf("\n");
+                numAzarSinRepetir(secondArray);
+                break;
+            case 3:
+                unionArrays(firstArray, secondArray);
+                break;
+            case 4:
+                interArray(firstArray, secondArray);
+                break;
+            case 5:
+                restaVector1(firstArray, secondArray);
+                break;
+            case 6:
+                restaVector2(firstArray, secondArray);
+                break;
+            default:
+                printf("Opcion Invalida\n");
+                break;
+        }
+    }while(opcion <=6 && opcion >= 1);
 }
 
-void interArray(int first[],int second[],int third[], int n){
+void numAzarSinRepetir(int array[]){
+    int numero;
+    bool band;
+    for(int i = 0; i < POSICIONES; i++){
+        do{
+            numero = rand() % 16 + 20;
+            band = false;
+            for(int j = 0; j < i; j++){
+                if(array[j]== numero){
+                    band=true;
+                    break;
+                }
+            }
+        }while(band);
+        array[i] = numero;
+    }
+
+    imprimir(array, POSICIONES);
+}
+
+void repeticionesArrays(int first[]){
+    int aux;
+    bool bandera = false;
+    while(!bandera){
+        bandera = true;
+        for(int i = 0; i < POSICIONES; i++){
+            if(first[i]> first[i+1]){
+                aux = first[i];
+                first[i] = first[i+1];
+                first[i + 1] = aux;
+                bandera = false;
+            }
+        }
+    }
+    int cantRepeticiones = 0;
+    for (int i = 0; i < POSICIONES; i++){
+        if(first[i]== first[i+1]){
+            cantRepeticiones++;
+        }
+    }
+    printf("%d", cantRepeticiones);
+}
+
+void interArray(int first[],int second[]){
     int intersec = 0;
     int cont = 0;
-    for(int i = 0; i < n; i++){
-        for(int j = 0; j < n; j++){
+    int third[POSICIONES];
+    for(int i = 0; i < POSICIONES; i++){
+        for(int j = 0; j < POSICIONES; j++){
             if(first[i] == second[j]){
                 intersec = 1;
                 break;
@@ -48,7 +119,7 @@ void interArray(int first[],int second[],int third[], int n){
         }
         intersec = 0;
     }
-    imprimir(third,cont);
+    imprimir(third, cont);
 }
 
 void diferenciaArrays(int unionArray[],int diferenciaArray[],int tamanio){
@@ -67,31 +138,48 @@ void diferenciaArrays(int unionArray[],int diferenciaArray[],int tamanio){
         }
         repetido = 0;
     }
-    imprimir(diferenciaArray,contador);
 }
 
-void unionArrays(int first[],int second[],int third[],int n,int k){
-    for(int i = 0; i < k; i++){
+void unionArrays(int first[],int second[]){
+    int repetidos = 0;
+    int third[20];
+    for(int i = 0; i < POSICIONES; i++){
         third[i] = first[i];
     }
-    for(int j = 0; j < k-n; j++){
-        third[j+n] = second[j];
+    for(int j = 0; j < POSICIONES; j++){
+        third[j+POSICIONES] = second[j];
     }
-    imprimir(third, k);
+    imprimir(third, 20);
 }
 
-int cargar(int array[], int tamanio){
+int cargar(int array[]){
     int numero = 0;
 
-    for(int i = 0; i < tamanio;i++){
-        numero=rand() % 20 + 1;
+    for(int i = 0; i <  POSICIONES;i++){
+        numero = rand() % 16 + 20;
         array[i] = numero;
     }
-    return array[8];
+    return array[POSICIONES];
 }
 
-void imprimir(int vector[],int length){
-    for(int i = 0; i < length; i++){
-        printf("%d -", vector[i]);
+void imprimir(int vector[], int largo){
+    for(int i = 0; i < largo; i++){
+        printf("%d |", vector[i]);
     }
+}
+
+void restaVector1(int array1[], int array2[]){
+    int restaVectores[POSICIONES];
+    for(int i = 0; i < POSICIONES; i++){
+        restaVectores[i] = array1[i] - array2[i];
+    }
+    imprimir(restaVectores, POSICIONES);
+}
+
+void restaVector2(int array1[], int array2[]){
+    int restaVectores[POSICIONES];
+    for(int i = 0; i < POSICIONES; i++){
+        restaVectores[i] = array2[i] - array1[i];
+    }
+    imprimir(restaVectores, POSICIONES);
 }
